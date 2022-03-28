@@ -3,9 +3,13 @@ import random
 from datetime import datetime
 import argparse
 
-def lt(a,b,i):
-    return a[i] < b[i]
-
+def lt(a,b,i,typ):
+	if typ == 'i' or typ == 'int':
+		return int(a[i]) < int(b[i])
+	elif typ == 'f' or typ == 'float':
+		return float(a[i]) < float(b[i])		
+	else:
+		return a[i] < b[i]
 
 
 
@@ -44,7 +48,7 @@ def shell_sort(a,ii):
 	return a
 
 
-def merge(a,lo,mid,hi,aux,ii):
+def merge(a,lo,mid,hi,aux,ii,typ):
 	i = lo
 	j = mid+1
 	aux[lo:hi+1] = a[lo:hi+1]
@@ -55,7 +59,7 @@ def merge(a,lo,mid,hi,aux,ii):
 		elif j>hi:
 			a[k] = aux[i]
 			i+=1
-		elif lt(aux[j],aux[i],ii):
+		elif lt(aux[j],aux[i],ii,typ):
 			a[k] = aux[j]
 			j+=1
 		else:
@@ -63,18 +67,18 @@ def merge(a,lo,mid,hi,aux,ii):
 			i += 1
 
 
-def m_sort(a,lo,hi,aux,ii):
+def m_sort(a,lo,hi,aux,ii,typ):
 	if hi<=lo:return
 	mid = lo + (hi-lo)//2
-	m_sort(a,lo,mid,aux,ii)
-	m_sort(a,mid+1,hi,aux,ii)
-	merge(a,lo,mid,hi,aux,ii)
+	m_sort(a,lo,mid,aux,ii,typ)
+	m_sort(a,mid+1,hi,aux,ii,typ)
+	merge(a,lo,mid,hi,aux,ii,typ)
 
 
 
-def merge_sort(a,ii):
+def merge_sort(a,ii,typ):
 	aux = [0]*len(a)
-	m_sort(a,0,len(a)-1,aux,ii)
+	m_sort(a,0,len(a)-1,aux,ii,typ)
 	return a
 
 
@@ -154,7 +158,8 @@ if __name__ == '__main__':
 			
 	parser.add_argument('m',type=int,help='m')
 	parser.add_argument('i',type=int,help='i')
-		
+	parser.add_argument('--more','-m',action='count',default=0)
+	parser.add_argument('--type','-type','-verbosity',type=str)
 	args = parser.parse_args()
 	a = []
 	m = args.m
@@ -162,5 +167,14 @@ if __name__ == '__main__':
 	for line in stdin:
 		a.append(line.split())
 	a.pop(0)
-	a = merge_sort(a,i)
-	print(a[0:m])
+	a = merge_sort(a,i,args.type)
+	if args.more == 1:
+		beg = len(a)-1
+		goal = len(a)-m-1
+		step = -1
+	else:
+		beg = 0
+		goal = m
+		step = 1
+	for el in range(beg,goal,step):
+		print(' '.join(a[el]))
