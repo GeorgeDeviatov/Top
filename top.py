@@ -154,12 +154,12 @@ def quick_sort_iter2(a,lo,hi,ii):
 
 if __name__ == '__main__':
 	
-	parser = argparse.ArgumentParser(description='SMTH')
+	parser = argparse.ArgumentParser(description='Top is a programm what sortes massives of massives(for example list of files(ls -l) with inf about them)')
 			
-	parser.add_argument('m',type=int,help='m')
-	parser.add_argument('i',type=int,help='i')
-	parser.add_argument('--more','-m',action='count',default=0)
-	parser.add_argument('--type','-type','-verbosity',type=str)
+	parser.add_argument('m',type=int,help='Count of elements to write')
+	parser.add_argument('i',type=int,help='Index by which to sort')
+	parser.add_argument('--more','-m',action='count',default=0,help='Sort in descending order or in ascending order')
+	parser.add_argument('--type','-type','-verbosity',type=str,help='Type in which will convert element')
 	args = parser.parse_args()
 	a = []
 	m = args.m
